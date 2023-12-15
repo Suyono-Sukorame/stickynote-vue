@@ -2,6 +2,7 @@
 import { ref } from "vue";
 
 const showForm = ref(false);
+const newMemo = ref("");
 </script>
 <template>
   <main>
@@ -32,7 +33,14 @@ const showForm = ref(false);
     <div v-if="showForm" class="overlay">
       <div class="modal">
         <button @click="showForm = false" class="close-btn">&times;</button>
-        <textarea name="note" id="note" cols="30" rows="10"></textarea>
+        {{ newMemo }}
+        <textarea
+          v-model="newMemo"
+          name="note"
+          id="note"
+          cols="30"
+          rows="10"
+        ></textarea>
         <button class="save-btn">Save</button>
       </div>
     </div>
