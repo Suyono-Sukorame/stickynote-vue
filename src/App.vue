@@ -3,6 +3,22 @@ import { ref } from "vue";
 
 const showForm = ref(false);
 const newMemo = ref("");
+const memos = ref([]);
+
+function saveMemo() {
+  memos.value.push({
+    id: Date.now(),
+    memo: newMemo.value,
+    date: new Date().toLocaleDateString("en-us"),
+    backgroundColor: getRandomColor(),
+  });
+  showForm.value = false;
+  newMemo.value = "";
+}
+
+function getRandomColor() {
+  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+}
 </script>
 <template>
   <main>
@@ -41,9 +57,13 @@ const newMemo = ref("");
           cols="30"
           rows="10"
         ></textarea>
-        <button class="save-btn">Save</button>
+        <button @click="saveMemo" class="save-btn">Save</button>
       </div>
     </div>
+
+    <pre>
+      {{ memos }}
+    </pre>
   </main>
 </template>
 
