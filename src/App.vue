@@ -1,9 +1,14 @@
+<script setup>
+import { ref } from "vue";
+
+const showForm = ref(false);
+</script>
 <template>
   <main>
     <div class="container">
       <header>
         <h1>Memo</h1>
-        <button>+</button>
+        <button @click="showForm = true">+</button>
       </header>
       <div class="cards-container">
         <div class="card">
@@ -24,9 +29,9 @@
         </div>
       </div>
     </div>
-    <div class="overlay">
+    <div v-if="showForm" class="overlay">
       <div class="modal">
-        <button class="close-btn">&times;</button>
+        <button @click="showForm = false" class="close-btn">&times;</button>
         <textarea name="note" id="note" cols="30" rows="10"></textarea>
         <button class="save-btn">Save</button>
       </div>
