@@ -28,20 +28,16 @@ function getRandomColor() {
         <button @click="showForm = true">+</button>
       </header>
       <div class="cards-container">
-        <div class="card">
+        <div
+          v-for="memo in memos"
+          class="card"
+          :style="{ backgroundColor: memo.backgroundColor }"
+        >
           <p class="main-text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+            {{ memo.memo }}
           </p>
           <p class="date">
-            {{ new Date().toLocaleDateString("en-us") }}
-          </p>
-        </div>
-        <div class="card">
-          <p class="main-text">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit.
-          </p>
-          <p class="date">
-            {{ new Date().toLocaleDateString("en-us") }}
+            {{ memo.date }}
           </p>
         </div>
       </div>
