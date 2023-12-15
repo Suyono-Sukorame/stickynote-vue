@@ -64,10 +64,6 @@ function getRandomColor() {
         <button @click="saveMemo" class="save-btn">Save</button>
       </div>
     </div>
-
-    <pre>
-      {{ memos }}
-    </pre>
   </main>
 </template>
 
