@@ -1,13 +1,12 @@
 <script setup>
 import { ref } from "vue";
-
 const showForm = ref(false);
 const newMemo = ref("");
 const memos = ref([]);
 const errorMessage = ref("");
 
-function saveMemo() {
-  if (newMemo.value === "") {
+function addMemo() {
+  if (!newMemo.value) {
     errorMessage.value = "Please enter a memo";
     return;
   }
@@ -17,51 +16,55 @@ function saveMemo() {
     date: new Date().toLocaleDateString("en-us"),
     backgroundColor: getRandomColor(),
   });
-  showForm.value = false;
   newMemo.value = "";
-  errorMessage.value = "";
+  showForm.value = false;
+}
+
+function deleteMemo(id) {
+  memos.value = memos.value.filter((memo) => memo.id !== id);
 }
 
 function getRandomColor() {
-  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
 }
 </script>
+
 <template>
   <main>
     <div class="container">
       <header>
-        <h1>Memo</h1>
-        <button @click="showForm = true">+</button>
+        <h1 class="header-title">Memo</h1>
+        <button @click="showForm = true" class="header-button">+</button>
       </header>
-      <div class="cards-container">
+      <div class="card-container">
         <div
-          v-for="memo in memos"
+          v-for="(memo, index) in memos"
           class="card"
+          :key="index"
           :style="{ backgroundColor: memo.backgroundColor }"
         >
-          <p class="main-text">
-            {{ memo.memo }}
-          </p>
-          <p class="date">
-            {{ memo.date }}
-          </p>
+          <p class="card-content">{{ memo.memo }}</p>
+          <div class="card-footer">
+            <p class="card-date">{{ memo.date }}</p>
+            <button @click="deleteMemo(memo.id)" class="card-button">x</button>
+          </div>
         </div>
       </div>
     </div>
-    <div v-if="showForm" class="overlay">
-      <div class="modal">
-        <button @click="showForm = false" class="close-btn">&times;</button>
-        <p class="error-message" v-if="errorMessage">
-          {{ errorMessage }} <br />
-        </p>
+    <div v-if="showForm" class="form-overlay">
+      <div class="form-modal">
+        <button @click="showForm = false" class="form-close-btn">
+          &times;
+        </button>
+        <p v-if="errorMessage" class="form-error">{{ errorMessage }}</p>
         <textarea
           v-model="newMemo"
-          name="note"
-          id="note"
+          name="memo"
+          id="memo"
           cols="30"
           rows="10"
         ></textarea>
-        <button @click="saveMemo" class="save-btn">Save</button>
+        <button @click="addMemo" class="form-save-btn">Save</button>
       </div>
     </div>
   </main>
@@ -72,53 +75,61 @@ main {
   height: 100vh;
   width: 100vw;
 }
+
 .container {
-  max-width: 1000px;
+  max-width: 900px;
   padding: 10px;
   margin: 0 auto;
 }
+
 header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-h1 {
+
+.header-title {
+  font-size: 48px;
   font-weight: bold;
   margin-bottom: 25px;
-  font-size: 50px;
   color: #495a7d;
 }
-header button {
+
+.header-button {
   border: none;
   padding: 10px;
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   cursor: pointer;
-  background-color: #495a7d;
   border-radius: 100%;
+  background-color: #495a7d;
   color: white;
 }
-.cards-container {
+
+.card-container {
   display: flex;
   flex-wrap: wrap;
+  gap: 20px;
 }
+
 .card {
   width: 225px;
   height: 225px;
+  padding: 10px;
   background-color: #ffa6c1;
-  padding: 12px;
+  margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-right: 20px;
-  margin-bottom: 20px;
-}
-.date {
-  font-size: 12.5px;
-  font-weight: bold;
 }
 
-.overlay {
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.form-overlay {
   position: absolute;
   top: 0;
   left: 0;
@@ -131,7 +142,7 @@ header button {
   justify-content: center;
 }
 
-.modal {
+.form-modal {
   width: 420px;
   background-color: white;
   border-radius: 10px;
@@ -141,7 +152,7 @@ header button {
   flex-direction: column;
 }
 
-.save-btn {
+.form-save-btn {
   padding: 10px 20px;
   font-size: 20px;
   width: 100%;
@@ -152,8 +163,8 @@ header button {
   margin-top: 15px;
   color: white;
 }
-/* create close button style */
-.close-btn {
+
+.form-close-btn {
   position: absolute;
   top: 5px;
   right: 10px;
@@ -161,10 +172,11 @@ header button {
   height: 30px;
   background-color: transparent;
   border: none;
-  font-size: 25px;
+  font-size: 30px;
   cursor: pointer;
 }
-.error-message {
+
+.form-error {
   color: red;
 }
 </style>
